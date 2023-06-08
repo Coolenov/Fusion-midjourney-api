@@ -1,0 +1,30 @@
+---
+- hosts: all
+  gather_facts: true
+  vars:
+    app_path      : /opt/fusion-midjourney-api
+    service_name  : fusion-midjourney-api
+    container_name: midjourney
+    
+  tasks:
+    - name : "create {{ app_path }}/"
+      file:
+        path : "{{ app_path }}/"
+        state: "directory"
+        mode : 0775 
+      become       : yes
+      become_method: sudo
+      
+    - name : "stop service"
+      shell: sudo docker stop {{container_name}}
+      ignore_errors: yes
+      
+    - name : "pull image"
+      shell: sudo docker pull coolenov/{{service_name}}:latest
+      
+    - name : "start service"
+      shell: sudo docker run --rm -d --name {{container_name}} coolenov/{{service_name}}:latest
+      
+    - name : "connect service to docker-network"
+      shell: sudo docker network connect net {{container_name}}
+      

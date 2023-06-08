@@ -23,15 +23,12 @@ class Midjourney:
 		body = soup.find("script", {"id":"__NEXT_DATA__"})
 		bodyText = body.text
 		bodyJson = json.loads(bodyText)
-		# pprint(bodyJson)
-
 		props = bodyJson["props"]
 		pageProps = props["pageProps"]
 		jobs = pageProps["jobs"]
 
 		posts = []
 		for job in jobs:
-			pprint(job)
 			event = job["event"]
 			pubTime = job["enqueue_time"]
 			imageUrl = event["seedImageURL"]
@@ -43,18 +40,4 @@ class Midjourney:
 				'source': 'Midjourney',
 				'tags': [],
 				'publishingTime': self._get_timestamp_from_string(pubTime)})
-		# pprint(posts)
 		return posts
-		
-
-		# print(posts)
-
-
-
-
-
-
-	
-
-# obj = Midjourney()
-# obj.getContent()
