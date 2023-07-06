@@ -26,16 +26,15 @@ class Midjourney:
 		props = bodyJson["props"]
 		pageProps = props["pageProps"]
 		jobs = pageProps["jobs"]
-
+		pubTime = job["enqueue_time"]
 		posts = []
 		for job in jobs:
 			event = job["event"]
-			pubTime = job["enqueue_time"]
 			imageUrl = event["seedImageURL"]
-			
+			textPrompt = event["textPrompt"]
 			posts.append({'title': None,
 				'link': imageUrl,
-				'description': None,
+				'description': textPrompt[0],
 				'imageUrl': imageUrl,
 				'source': 'Midjourney',
 				'tags': [],
